@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import ReactModal from "react-modal";
+import { useNavigate } from "react-router-dom";
 import firebase from "../../firebase";
 import PageLoader from "../PageLoader";
 
 const Audio = () => {
+  const navigate = useNavigate();
   const [deleting, setDeleting] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const db = firebase.firestore();
@@ -171,8 +173,8 @@ const Audio = () => {
         {audioData && (
           <div>
             {audioData.docs.map((doc) => (
-              <div className="w-full px-2 mt-5">
-                <div className="w-full text-white bg-green-500 my-2 rounded-lg">
+              <div key={doc.id} className="w-full px-2 mt-5">
+                <div className="w-full text-white bg-indigo-400 my-2 rounded-lg">
                   <div className="container flex items-center justify-between px-6 py-4 mx-auto">
                     <div className="flex">
                       <svg
@@ -195,51 +197,84 @@ const Audio = () => {
                       </p>
                     </div>
 
-                    <button
-                      onClick={() => {
-                        if (
-                          window.confirm(
-                            "Are you sure to delete" +
-                              " (" +
-                              doc.data().uploadName +
-                              ")"
-                          )
-                        ) {
-                          setOpenModal(true);
-                          setDeleting(true);
-                          firebase
-                            .storage()
-                            .ref(`roxAudios/${doc.data().uploadName}`)
-                            .delete()
-                            .then(() => {
-                              firebase
-                                .firestore()
-                                .collection("Audios")
-                                .doc(doc.data().uploadName)
-                                .delete()
-                                .then(() => {
-                                  setDeleting(false);
-                                });
-                            });
-                        }
-                      }}
-                      className="p-1 transition-colors duration-200 transform rounded-md hover:bg-opacity-25 hover:bg-gray-600 focus:outline-none"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
+                    <div className="flex flex-row justify-start items-center">
+                      <button
+                        onClick={() => {
+                          if (
+                            window.confirm(
+                              "Are you sure to delete" +
+                                " (" +
+                                doc.data().uploadName +
+                                ")"
+                            )
+                          ) {
+                            setOpenModal(true);
+                            setDeleting(true);
+                            firebase
+                              .storage()
+                              .ref(`roxAudios/${doc.data().uploadName}`)
+                              .delete()
+                              .then(() => {
+                                firebase
+                                  .firestore()
+                                  .collection("Audios")
+                                  .doc(doc.data().uploadName)
+                                  .delete()
+                                  .then(() => {
+                                    setDeleting(false);
+                                  });
+                              });
+                          }
+                        }}
+                        className="p-1 transition-colors mr-3 duration-200 transform rounded-md hover:bg-opacity-50 bg-opacity-25 bg-gray-600 hover:bg-gray-700 focus:outline-none"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        onClick={() =>
+                          navigate("/audioActivity", {
+                            state: {
+                              id: doc.id,
+                              status: doc.data().audioStatus,
+                              contentName: doc.data().uploadName,
+                            },
+                          })
+                        }
+                        class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in"
+                      >
+                        <input
+                          type="checkbox"
+                          name="toggle"
+                          id="toggle"
+                          class={
+                            doc.data().audioStatus === "unlocked"
+                              ? "toggle-checkbox absolute block w-6 h-6 rounded-full bg-white right-0 border-green-400 border-4 appearance-none cursor-pointer"
+                              : "toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
+                          }
                         />
-                      </svg>
-                    </button>
+                        <label
+                          for="toggle"
+                          class={
+                            doc.data().audioStatus === "unlocked"
+                              ? "toggle-label block overflow-hidden h-6 rounded-full bg-green-400 cursor-pointer"
+                              : "toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
+                          }
+                        ></label>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

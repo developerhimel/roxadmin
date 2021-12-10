@@ -4,8 +4,10 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import firebase from "../../firebase";
 import ScrollToBottom from "react-scroll-to-bottom";
 import moment from "moment";
+import { useNavigate } from "react-router";
 
 const Chat = () => {
+  const navigate = useNavigate();
   const db = firebase.firestore();
   const [message, setMessage] = useState("");
   const [fetchMessages, setFetchMessages] = useState([]);
@@ -49,13 +51,12 @@ const Chat = () => {
       .firestore()
       .collection("ChatRoom")
       .doc("active chat document")
-      .get()
-      .then((documentSnapshot) => {
+      .onSnapshot((documentSnapshot) => {
         if (documentSnapshot.exists) {
           setChatState(false);
         }
       });
-  }, [fetchMessages]);
+  }, [chatState]);
   return (
     <div>
       <div className="w-full border-b pb-2">
@@ -155,13 +156,16 @@ const Chat = () => {
                                 );
                               })
                           );
-                        firebase.firestore().collection("ChatRoom").add({
-                          chatTitle: doc.data().chatTitle,
-                          question: doc.data().question,
-                          chatStatus: "Ended",
-                          Timestamp: millisec,
-                        });
-                        window.location.reload();
+                        firebase
+                          .firestore()
+                          .collection("ChatRoom")
+                          .add({
+                            chatTitle: doc.data().chatTitle,
+                            question: doc.data().question,
+                            chatStatus: "Ended",
+                            Timestamp: millisec,
+                          })
+                          .then(setChatState(true), navigate("/roxchat"));
                       }
                     }}
                     className="absolute top-0 right-0 bg-red-500 px-3 py-2 hover:bg-red-600 rounded-bl-lg rounded-tr-lg"

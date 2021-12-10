@@ -16,9 +16,8 @@ code {
 }
 
 html {
-  /* font-size: 93.75% !important; */
-  font-size: 84.50% !important;
-  
+  /* font-size: 93.75% !important; /*For Localhost*/
+  font-size: 84.50% !important; /*For Live*/
 }
 .h-500 {
   height: 35rem;

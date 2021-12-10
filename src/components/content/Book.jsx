@@ -1,10 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { useCollection } from "react-firebase-hooks/firestore";
+import { useNavigate } from "react-router-dom";
 import firebase from "../../firebase";
 import PageLoader from "../PageLoader";
 
 const Book = () => {
+  const navigate = useNavigate();
   const db = firebase.firestore();
   const [booksData, loading, error] = useCollection(
     db.collection("Books").orderBy("Timestamp", "desc"),
@@ -74,7 +75,7 @@ const Book = () => {
               key={doc.id}
               className="bg-gray-100 flex items-center justify-center my-3 overflow-hidden rounded-lg border mr-3 w-60"
             >
-              <div className="bg-white rounded-xl overflow-hidden shadow-xl hover:scale-105 hover:shadow-2xl transform duration-500 cursor-pointer">
+              <div className="bg-white rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transform duration-500 group">
                 <div className="p-4">
                   <h1 className="mt-4 text-2xl font-bold cursor-pointer truncate overflow-ellipsis overflow-hidden">
                     {doc.data().bookName}
@@ -83,14 +84,12 @@ const Book = () => {
                     <p className="mt-2 font-sans text-sm font-bold text-gray-400">
                       by {doc.data().authorName}
                     </p>
-                    <p
-                      className={
-                        doc.data().bookStatus === "In Stock"
-                          ? "mt-2 font-sans text-sm text-white px-2 py-1 bg-green-500 rounded-full"
-                          : "mt-2 font-sans text-sm text-white px-2 py-1 bg-red-500 rounded-full"
-                      }
-                    >
-                      {doc.data().bookStatus}
+                    <p>
+                      {doc.data().bookStatus === "locked" ? (
+                        <i class="fas fa-lock text-gray-400 ml-1"></i>
+                      ) : (
+                        <i class="fas fa-unlock text-green-400 ml-1"></i>
+                      )}
                     </p>
                   </div>
                 </div>
@@ -101,15 +100,38 @@ const Book = () => {
                     src={doc.data().bookImage}
                   />
                 </div>
-                <div className="flex flex-col justify-start items-start mx-2 p-2 mt-1 pt-0 rounded-lg border">
-                  <p className="mt-2 font-sans text-sm font-bold text-gray-400 border-b w-full pb-2">
-                    <span style={{ color: "#7C9AF3" }}>PaperBack :</span>{" "}
-                    {doc.data().paperPrice} $
-                  </p>
-                  <p className="mt-2 font-sans text-sm font-bold text-gray-400">
-                    <span style={{ color: "#7C9AF3" }}>Pdf :</span>{" "}
-                    {doc.data().pdfPrice} $
-                  </p>
+                <div className="my-3 flex flex-row justify-center items-center">
+                  <button
+                    onClick={() =>
+                      navigate("/booksActivity", {
+                        state: {
+                          id: doc.id,
+                          status: doc.data().bookStatus,
+                          contentName: doc.data().bookName,
+                        },
+                      })
+                    }
+                    class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in"
+                  >
+                    <input
+                      type="checkbox"
+                      name="toggle"
+                      id="toggle"
+                      class={
+                        doc.data().bookStatus === "unlocked"
+                          ? "toggle-checkbox absolute block w-6 h-6 rounded-full bg-white right-0 border-green-400 border-4 appearance-none cursor-pointer"
+                          : "toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
+                      }
+                    />
+                    <label
+                      for="toggle"
+                      class={
+                        doc.data().bookStatus === "unlocked"
+                          ? "toggle-label block overflow-hidden h-6 rounded-full bg-green-400 cursor-pointer"
+                          : "toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
+                      }
+                    ></label>
+                  </button>
                 </div>
                 <div className="w-full flex flex-row justify-center p-5">
                   <button
@@ -138,7 +160,6 @@ const Book = () => {
                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                       />
                     </svg>
-                    <span className="mx-1">Delete</span>
                   </button>
                 </div>
               </div>

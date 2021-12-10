@@ -174,7 +174,7 @@ const Video = () => {
             {videoData.docs.map((doc) => (
               <div
                 key={doc.id}
-                className="rounded-lg p-3 m-3 shadow-2xl flex flex-col justify-center items-center text-white bg-green-500"
+                className="rounded-lg p-3 m-3 shadow-2xl flex flex-col justify-center items-center text-white bg-indigo-400"
               >
                 <YouTube className="w-80 h-40" videoId={doc.data().videoId} />
                 <button

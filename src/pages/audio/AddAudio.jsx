@@ -9,6 +9,7 @@ const AddAudio = () => {
   const [progress, setProgress] = useState(0);
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
+  const [audioStatus, setAudioStatus] = useState("unlocked");
 
   const firebaseTimeStamp = new Date(
     firebase.firestore.Timestamp.now().seconds * 1000
@@ -53,6 +54,7 @@ const AddAudio = () => {
                 url: url,
                 uploadName: file.name,
                 new: true,
+                audioStatus: audioStatus,
                 Timestamp: millisec,
               })
               .then(setLoading(false), history("/audio"));
@@ -67,9 +69,14 @@ const AddAudio = () => {
           Add New Audio To Rox!
         </h2>
         {loading === true ? (
-          <h1 className="text-center text-3xl font-bold text-red-600">
-            Uploading!
-          </h1>
+          <div>
+            <h1 className="text-center text-3xl font-bold text-red-600">
+              Uploading!
+            </h1>
+            <div className="w-full mt-3">
+              <h2 className="text-center">Uploading {progress}%</h2>
+            </div>
+          </div>
         ) : null}
 
         <div>
@@ -121,8 +128,46 @@ const AddAudio = () => {
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring"
             />
           </div>
-          <div className="w-full mt-3">
-            <h2 className="text-center">Uploading {progress}%</h2>
+
+          <span className="text-gray-700 dark:text-gray-200 mt-2">
+            Audio Status
+          </span>
+          <div className="w-full pr-4 py-2">
+            <div className="flex flex-row justify-start items-center">
+              <div
+                onClick={() =>
+                  setAudioStatus(
+                    audioStatus === "unlocked" ? "locked" : "unlocked"
+                  )
+                }
+                class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in"
+              >
+                <input
+                  type="checkbox"
+                  green-400
+                  name="toggle"
+                  id="toggle"
+                  class={
+                    audioStatus === "unlocked"
+                      ? "toggle-checkbox absolute block w-6 h-6 rounded-full bg-white right-0 border-green-400 border-4 appearance-none cursor-pointer"
+                      : "toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
+                  }
+                />
+                <label
+                  for="toggle"
+                  class={
+                    audioStatus === "unlocked"
+                      ? "toggle-label block overflow-hidden h-6 rounded-full bg-green-400 cursor-pointer"
+                      : "toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
+                  }
+                ></label>
+              </div>
+              {audioStatus === "unlocked" ? (
+                <i class="fas fa-unlock text-yellow-400 ml-1"></i>
+              ) : (
+                <i class="fas fa-lock text-gray-400 ml-1"></i>
+              )}
+            </div>
           </div>
           <div className="flex justify-center mt-6">
             <button

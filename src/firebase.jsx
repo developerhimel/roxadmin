@@ -4,13 +4,13 @@ import "firebase/firestore";
 import "firebase/storage";
 
 const config = {
-  apiKey: "AIzaSyCM-kYT5WSG205M7xQ0ar0c9b3-T_rde_k",
-  authDomain: "ontherox-63f4d.firebaseapp.com",
-  projectId: "ontherox-63f4d",
-  storageBucket: "ontherox-63f4d.appspot.com",
-  messagingSenderId: "144696005559",
-  appId: "1:144696005559:web:c7a7e0d87e52510cf90e32",
-  measurementId: "G-L1JDLRMR56",
+  apiKey: "AIzaSyB34pKyKlXm1ukGMLfsYz1XqUAkTg5HB2o",
+  authDomain: "on-the-rox-app.firebaseapp.com",
+  projectId: "on-the-rox-app",
+  storageBucket: "on-the-rox-app.appspot.com",
+  messagingSenderId: "668030157807",
+  appId: "1:668030157807:web:5ad36f5853fd2bcd406c1a",
+  measurementId: "${config.measurementId}",
 };
 
 if (!firebase.apps.length) {

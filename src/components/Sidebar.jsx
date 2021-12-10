@@ -9,6 +9,11 @@ import Post from "./content/Post";
 import Products from "./content/Products";
 import Dark from "./content/Dark";
 import StreamOverView from "./content/StreamOverView";
+import ViewPost from "./content/ViewPost";
+import StreamSet from "./content/StreamSet";
+import NotificationList from "./content/NotificationList";
+import SubscriptionsList from "./content/SubscriptionsList";
+import OrderList from "./content/OrderList";
 
 const Sidebar = ({ active }) => {
   const history = useNavigate();
@@ -24,9 +29,9 @@ const Sidebar = ({ active }) => {
           <a href="/notifications">
             <button className="px-3 py-1 pr-2 hover:bg-indigo-500 rounded-tl-full rounded-bl-full border-r relative">
               <i class="fas fa-bell text-xl p-1 text-white"></i>
-              <span className="absolute -top-1 -left-1 w-6 h-6 text-center bg-red-500 text-white rounded-full border-2 border-white text-sm">
-                5
-              </span>
+              {/* <span className="absolute -top-1 -left-1 w-6 h-6 text-center bg-red-500 text-white rounded-full border-2 border-white text-sm">
+                0
+              </span> */}
             </button>
           </a>
           <button
@@ -302,7 +307,7 @@ const Sidebar = ({ active }) => {
 
                 <a
                   className={
-                    active === "subscription"
+                    active === "subscriptions"
                       ? "flex items-center px-4 py-2 mt-5 text-gray-700 bg-gray-200 rounded-md dark:bg-gray-700 dark:text-gray-200"
                       : "flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-200 transform rounded-md dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200 hover:text-gray-700"
                   }
@@ -375,7 +380,17 @@ const Sidebar = ({ active }) => {
               <Dark />
             ) : active === "stream" ? (
               <StreamOverView />
-            ) : null}
+            ) : active === "streamset" ? (
+              <StreamSet />
+            ) : active === "notification" ? (
+              <NotificationList />
+            ) : active === "subscriptions" ? (
+              <SubscriptionsList />
+            ) : active === "order" ? (
+              <OrderList />
+            ) : (
+              <ViewPost id={active} />
+            )}
           </div>
         </div>
       </div>

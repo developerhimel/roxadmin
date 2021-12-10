@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import firebase from "../../firebase";
 import moment from "moment";
 
-const Dashboard = () => {
+function OrderList() {
   const [users, setUsers] = useState([]);
   useEffect(() => {
     const users = firebase
       .firestore()
-      .collection("users")
+      .collection("Orders")
       .onSnapshot((querySnapshot) => {
         const user = [];
         querySnapshot.forEach((documentSnapshot) => {
@@ -23,34 +23,12 @@ const Dashboard = () => {
   }, []);
   return (
     <div>
-      {/* Dashboard Title Start */}
-      <div className="w-full flex flex-row justify-center items-center border-b pb-4">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6 animate-spin text-gray-400 mt-2 mr-2"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-          />
-        </svg>
-        <h1 className="font-bold text-3xl text-gray-400">
-          Realtime App Status
-        </h1>
-      </div>
-      {/* Dashboard Title end */}
-
       <div class="grid grid-cols-1 gap-5 mt-6 sm:grid-cols-2 lg:grid-cols-4 pt-5">
         <div class="p-4 transition-shadow border rounded-lg shadow-sm hover:shadow-lg relative">
-          <i class="fas fa-users absolute top-0 left-1/2 right-1/2 text-xl text-gray-400 font-bold"></i>
+          <i class="fas fa-clipboard-list-check absolute top-0 left-1/2 right-1/2 text-xl text-gray-400 font-bold"></i>
           <div class="flex items-start justify-between">
             <div class="flex flex-col space-y-2">
-              <span class="text-gray-400">Total Users</span>
+              <span class="text-gray-400">Total Orders</span>
               <span class="text-lg font-semibold">{users.length}</span>
             </div>
             <div class="p-8 bg-gray-200 rounded-md">
@@ -70,81 +48,13 @@ const Dashboard = () => {
               </svg>
             </div>
           </div>
-          <div>
-            <span class="inline-block px-2 text-sm text-white bg-purple-500 rounded">
-              100%
-            </span>
-            <span className="ml-2">from 2021</span>
-          </div>
-        </div>
-        <div class="p-4 transition-shadow border rounded-lg shadow-sm hover:shadow-lg relative">
-          <i class="fas fa-user-graduate absolute top-0 left-1/2 right-1/2 text-xl text-gray-400 font-bold"></i>
-          <div class="flex items-start justify-between">
-            <div class="flex flex-col space-y-2">
-              <span class="text-gray-400">Premium Users</span>
-              <span class="text-lg font-semibold">0</span>
-            </div>
-            <div class="p-8 bg-gray-200 rounded-md">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 animate-spin text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                />
-              </svg>
-            </div>
-          </div>
-          <div>
-            <span class="inline-block px-2 text-sm text-white bg-yellow-500 rounded">
-              0%
-            </span>
-            <span className="ml-2">from 2021</span>
-          </div>
-        </div>
-        <div class="p-4 transition-shadow border rounded-lg shadow-sm hover:shadow-lg relative">
-          <i class="fas fa-shopping-cart absolute top-0 left-1/2 right-1/2 text-xl text-gray-400 font-bold"></i>
-          <div class="flex items-start justify-between">
-            <div class="flex flex-col space-y-2">
-              <span class="text-gray-400">Total orders</span>
-              <span class="text-lg font-semibold">0</span>
-            </div>
-            <div class="p-8 bg-gray-200 rounded-md">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 animate-spin text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                />
-              </svg>
-            </div>
-          </div>
-          <div>
-            <span class="inline-block px-2 text-sm text-white bg-pink-500 rounded">
-              0%
-            </span>
-            <span className="ml-2">from 2021</span>
-          </div>
         </div>
         <div class="p-4 transition-shadow border rounded-lg shadow-sm hover:shadow-lg relative">
           <i class="fas fa-usd-circle absolute top-0 left-1/2 right-1/2 text-xl text-gray-400 font-bold"></i>
           <div class="flex items-start justify-between">
             <div class="flex flex-col space-y-2">
               <span class="text-gray-400">Total Earnings</span>
-              <span class="text-lg font-semibold">0$</span>
+              <span class="text-lg font-semibold">{users.length}$</span>
             </div>
             <div class="p-8 bg-gray-200 rounded-md">
               <svg
@@ -163,15 +73,9 @@ const Dashboard = () => {
               </svg>
             </div>
           </div>
-          <div>
-            <span class="inline-block px-2 text-sm text-white bg-blue-500 rounded">
-              0%
-            </span>
-            <span className="ml-2">from 2021</span>
-          </div>
         </div>
       </div>
-      <h3 class="mt-6 text-xl">Users</h3>
+      {/* <h3 class="mt-6 text-xl">Subscribed Users</h3>
       <div class="flex flex-col mt-6">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -244,22 +148,16 @@ const Dashboard = () => {
                             Subscribed
                           </span>
                         ) : (
-                          <span class="inline-flex px-2 text-xs font-semibold leading-5 text-red-800 bg-red-100 rounded-full">
+                          <span class="inline-flex px-2 text-xs font-semibold leading-5 text-red-800 bg-green-100 rounded-full">
                             Unsubscribed
                           </span>
                         )}
                       </td>
-                      {item.subscription === "subscribed" ? (
-                        <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          {moment(item.subsEnd).format(
-                            "Do MMM, YYYY   h:mm:ss A"
-                          )}
-                        </td>
-                      ) : (
-                        <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-                          --------
-                        </td>
-                      )}
+                      <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
+                        {moment(item.subsEnd).format(
+                          "Do MMM, YYYY   h:mm:ss A"
+                        )}
+                      </td>
                       <td class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
                         <a
                           href="#"
@@ -288,9 +186,9 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
-};
+}
 
-export default Dashboard;
+export default OrderList;

@@ -1,12 +1,13 @@
 import React from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import firebase from "../../firebase";
+import { Link } from "react-router-dom";
 import PageLoader from "../PageLoader";
 
 function Post() {
   const db = firebase.firestore();
-  const [productData, loading, error] = useCollection(
-    db.collection("Products").orderBy("Timestamp", "desc"),
+  const [postData, loading, error] = useCollection(
+    db.collection("Posts").orderBy("Timestamp", "desc"),
     {
       snapshotListenOptions: { includeMetadataChanges: true },
     }
@@ -66,134 +67,59 @@ function Post() {
           <PageLoader />
         </div>
       )}
-      {productData && (
+      {postData && (
         <div className="w-full flex flex-row justify-start flex-wrap">
-          {productData.docs.map((doc) => (
+          {postData.docs.map((doc) => (
             <div key={doc.id} className="py-6 mx-2">
               <div className="flex max-w-md bg-white shadow-lg rounded-lg border overflow-hidden">
                 <div
                   className="w-1/3 bg-cover"
                   style={{
-                    // backgroundImage: `url(${doc.data().productImage})`,
-                    backgroundImage:
-                      "url('https://vsgriffin.com/wp-content/uploads/2021/11/Chareka-Gadson-872x675.jpg')",
+                    backgroundImage: `url(${doc.data().postImage})`,
                   }}
                 ></div>
                 <div className="w-2/3 p-4">
                   <h1 className="text-gray-900 font-bold text-2xl truncate overflow-ellipsis overflow-hidden">
-                    {/* {doc.data().productName} */}
-                    The Importance Of The Trademark And Why You Should
+                    {doc.data().postTitle}
                   </h1>
                   <p className="mt-2 text-gray-600 text-sm line-clamp-3">
-                    {/* {doc.data().productDescription} */}
-                    We are currently seeing a surge of entrepreneurs; many
-                    individuals are taking advantage of the stillness of the
-                    pandemic and are finding ways to multiply the avenues in
-                    which they generate income. One of the missteps many
-                    business owners take is not protecting the brands they have
-                    created. Trademarking is seen as another expense of being an
-                    entrepreneur, but not enough of these individuals are
+                    {doc.data().postDes}
                   </p>
-                  {doc.data().totalReview == null ? (
-                    <div className="flex item-center mt-2.5 mb-2">
-                      <svg
-                        className={
-                          Math.floor(
-                            doc.data().star / doc.data().totalReview
-                          ) >= 1
-                            ? "w-5 h-5 fill-current text-yellow-500"
-                            : "w-5 h-5 fill-current text-gray-400"
-                        }
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
-                      </svg>
-                      <svg
-                        className={
-                          Math.floor(
-                            doc.data().star / doc.data().totalReview
-                          ) >= 2
-                            ? "w-5 h-5 fill-current text-yellow-500"
-                            : "w-5 h-5 fill-current text-gray-400"
-                        }
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
-                      </svg>
-                      <svg
-                        className={
-                          Math.floor(
-                            doc.data().star / doc.data().totalReview
-                          ) >= 3
-                            ? "w-5 h-5 fill-current text-yellow-500"
-                            : "w-5 h-5 fill-current text-gray-400"
-                        }
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
-                      </svg>
-                      <svg
-                        className={
-                          Math.floor(
-                            doc.data().star / doc.data().totalReview
-                          ) >= 4
-                            ? "w-5 h-5 fill-current text-yellow-500"
-                            : "w-5 h-5 fill-current text-gray-400"
-                        }
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
-                      </svg>
-                      <svg
-                        className={
-                          Math.floor(
-                            doc.data().star / doc.data().totalReview
-                          ) >= 5
-                            ? "w-5 h-5 fill-current text-yellow-500"
-                            : "w-5 h-5 fill-current text-gray-400"
-                        }
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
-                      </svg>
-                    </div>
-                  ) : (
-                    <div className="flex flex-row items-center mt-2">
-                      <h1 className="bg-yellow-500 text-white font-bold px-2 py-0.5 rounded-full">
-                        New
-                      </h1>
-                    </div>
-                  )}
+                  <div className="flex flex-row items-center mt-2">
+                    <h1 className="bg-yellow-500 text-white font-bold px-2 py-0.5 rounded-full">
+                      New
+                    </h1>
+                  </div>
                   <div className="flex item-center justify-between mt-3">
                     <h1 className="text-gray-500 font-bold text-sm">
-                      {/* ${doc.data().productPrice} */}
-                      <i class="fas fa-thumbs-up"></i> (50)
+                      <i class="fas fa-thumbs-up"></i> ({doc.data().like})
                     </h1>
                     <h1 className="text-gray-500 font-bold text-sm">
-                      {/* ${doc.data().productPrice} */}
-                      <i class="fas fa-comment"></i> (7)
+                      <i class="fas fa-comment"></i> ({doc.data().comment})
                     </h1>
                     <div>
-                      <button className="px-3 py-2 mr-2 bg-blue-400 hover:bg-blue-500 text-white text-xs font-bold uppercase rounded">
-                        <i className="fad fa-edit"></i>
-                      </button>
+                      <Link to={`/viewPost?id=${doc.id}`}>
+                        <button className="px-3 py-2 mr-2 bg-blue-400 hover:bg-blue-500 text-white text-xs font-bold uppercase rounded">
+                          <i className="fas fa-eye"></i>
+                        </button>
+                      </Link>
                       <button
                         onClick={() => {
                           if (
                             window.confirm(
-                              "Are you sure to delete this Product!"
+                              "Are you sure to delete this Post!"
                             )
                           ) {
-                            // firebase
-                            //   .firestore()
-                            //   .collection("Products")
-                            //   .doc(doc.id)
-                            //   .delete();
+                            firebase
+                              .firestore()
+                              .collection("Posts")
+                              .doc(doc.id)
+                              .delete();
                           }
                         }}
                         className="px-3 py-2 bg-red-400 hover:bg-red-500 text-white text-xs font-bold uppercase rounded"
                       >
-                        <i className="fad fa-trash"></i>
+                        <i className="fas fa-trash"></i>
                       </button>
                     </div>
                   </div>
